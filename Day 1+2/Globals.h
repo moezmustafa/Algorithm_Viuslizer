@@ -7,8 +7,8 @@
 {
     public:
      
-     float ScreenWidth = 1920;
-     float ScreenHeight = 1080;
+     float ScreenWidth = 1366;
+     float ScreenHeight = 786;
    
     
      int ScreenFPS = 60;

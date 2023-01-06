@@ -13,23 +13,20 @@ int main()
 	
 
 
-	InitWindow(global.ScreenWidth, global.ScreenHeight, "Hello World");
+	InitWindow(global.ScreenWidth, global.ScreenHeight, "Algorithm and DataStructure Visualizer");
 	SetTargetFPS(global.ScreenFPS);
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
 	
-		// load ./assets/Background.png
-		Texture2D background = LoadTexture("./assets/Background.png");
-		// draw the background
+		ClearBackground(RAYWHITE);
 		
-		//display the background at the center of the screen
-		DrawTexture(background, global.ScreenWidth / 2 - background.width / 2, global.ScreenHeight / 2 - background.height / 2, WHITE);
+	
 
 		menu.CloseButton(global);
 		
-		menu.AlgorithmButton(global);
-		menu.DataStructureButton(global);
+		menu.CenterButtons(global);
+		//menu.DataStructureButton(global);
 
 		
 
@@ -40,6 +37,9 @@ int main()
 
 		
 		
+		
+	//void DrawText("String text here ", int posX, int posY, int fontSize, Color color);
+	DrawText("Hello World", 100, 100, 20, BLACK);
 
 
 
