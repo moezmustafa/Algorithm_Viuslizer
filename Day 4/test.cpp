@@ -15,13 +15,15 @@ int main()
     }
 
 
-    //merge sort the array arr
-    mergeSort(arr, 0, 9) ;
+    //print array
 
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
 
-
-
-
+    // sort the arry using merge sort
+    
 
     
 }

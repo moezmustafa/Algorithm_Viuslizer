@@ -1,5 +1,11 @@
-//merge sort
+
+//merge sort algorithm
+
 #include <iostream>
-#include <vector>
 
+int arr[10];
 
+int main()
+{
+    
+}
