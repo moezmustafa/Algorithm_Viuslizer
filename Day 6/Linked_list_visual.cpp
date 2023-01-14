@@ -5,12 +5,14 @@
 
 using namespace std;
 
-int initial_pos_x = 100;
+int initial_pos_x = 50;
 int initial_pos_y = 100;
 
 bool stopper = false;
 
 int value_for_new_node = 0;
+
+bool no_value_selected = true;
 
 class Linked_List_Node {
 public:
@@ -109,15 +111,27 @@ void Draw()
 	}
 }
 
+void Delete_Node()
+{
+	Linked_List_Node* temp = HEAD;
+	HEAD = temp->next;
+	delete temp;
+	if(initial_pos_x > 50)
+	{
+	initial_pos_x -= 100;
+	}
+
+}
+
 int main()
 {
 
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 1920;
+	int screenWidth = 800;
 	int screenHeight = 450;
 
-	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+	InitWindow(screenWidth, screenHeight, "Linked List Test case 3");
 
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
@@ -138,7 +152,7 @@ int main()
 
 		ClearBackground(RAYWHITE);
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+		//DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
 
 
@@ -149,8 +163,17 @@ int main()
 
 
 
-		// display the value of Value_for_new_node with text "value_for_new_node :"
-		DrawText(TextFormat("Value_for_new_node : %i", value_for_new_node), 100, 200, 20, BLACK);
+		if (no_value_selected == true)
+		{
+			DrawText("Select A Value For NODE !!!", 100, 200, 20, BLACK);
+
+		}
+		else {
+			// display the value of value_of_new_node , with the text "Value of the new node is : "
+			DrawText(TextFormat("Value of the new node is : %i", value_for_new_node), 100, 250, 20, BLACK);
+		}
+
+
 
 		// if the stopper is true , revoke the Draw() function
 		if (stopper == false)
@@ -177,9 +200,7 @@ int main()
 		// DrawText(TextFormat("%i", node4->data), node5->self_position_X + node5->width / 2 - 5, node5->self_position_Y + node5->height / 2 - 10, 20, BLACK);
 
 		//Create a button with the text "Add Node" at the bottom left corner of the screen
-		Rectangle button = { 0, 400, 100, 50 };
-		DrawRectangleRec(button, BLACK);
-		DrawText("Add Node", 10, 410, 20, WHITE);
+
 
 		// 5 rectangles , with 5 values if the button is clicked , set value of value_for_new_node to the value of the button
 		Rectangle button1 = { 0, 0, 100, 50 };
@@ -209,6 +230,7 @@ int main()
 			DrawText("1", 10, 10, 20, WHITE);
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 			{
+				no_value_selected = false;
 				value_for_new_node = 1;
 			}
 		}
@@ -218,6 +240,7 @@ int main()
 			DrawText("2", 110, 10, 20, WHITE);
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 			{
+				no_value_selected = false;
 				value_for_new_node = 2;
 			}
 		}
@@ -227,6 +250,7 @@ int main()
 			DrawText("3", 210, 10, 20, WHITE);
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 			{
+				no_value_selected = false;
 				value_for_new_node = 3;
 			}
 		}
@@ -236,6 +260,7 @@ int main()
 			DrawText("4", 310, 10, 20, WHITE);
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 			{
+				no_value_selected = false;
 				value_for_new_node = 4;
 			}
 		}
@@ -245,18 +270,44 @@ int main()
 			DrawText("5", 410, 10, 20, WHITE);
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 			{
+				no_value_selected = false;
 				value_for_new_node = 5;
 			}
 		}
 
+		Rectangle add_button = { 0, 400, 100, 50 };
+		DrawRectangleRec(add_button, BLACK);
+		DrawText("Add Node", 10, 410, 20, WHITE);
 
-		if (CheckCollisionPointRec(GetMousePosition(), button))
+		// DRAW THE DELETE BUTTON at the bottom right corner of the screen
+		Rectangle delete_button = { 500, 400, 100, 50 };
+		DrawRectangleRec(delete_button, BLACK);
+		DrawText("Delete Node", 510, 410, 20, WHITE);
+
+		// if the mouse is over the button , change the color of the button to red
+		if (CheckCollisionPointRec(GetMousePosition(), delete_button))
 		{
-			DrawRectangleRec(button, RED);
+			DrawRectangleRec(delete_button, RED);
+			DrawText("Delete Node", 510, 410, 20, WHITE);
+			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+			{
+					Delete_Node();
+				
+			}
+		}
+
+		if (CheckCollisionPointRec(GetMousePosition(), add_button))
+		{
+			DrawRectangleRec(add_button, RED);
 			DrawText("Add Node", 10, 410, 20, WHITE);
 			if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 			{
-				Insert_New_Node(value_for_new_node);
+				if (no_value_selected == false)
+				{
+					// add a node to the tree
+					Insert_New_Node(value_for_new_node);
+					no_value_selected = true;
+				}
 			}
 		}
 
