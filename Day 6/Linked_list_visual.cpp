@@ -6,13 +6,18 @@
 using namespace std;
 
 int initial_pos_x = 50;
-int initial_pos_y = 100;
+int initial_pos_y = 120;
 
 bool stopper = false;
 
 int value_for_new_node = 0;
 
 bool no_value_selected = true;
+
+
+int speed_X = 0;
+int speed_Y = 0;
+
 
 class Linked_List_Node {
 public:
@@ -35,8 +40,7 @@ public:
 	int self_position_Y;
 
 	// speed and animation variables
-	int speed_X = 0;
-	int speed_Y = 0;
+	
 
 
 
@@ -83,7 +87,7 @@ void Insert_New_Node(int data)
 	temp->data = data;
 	temp->next = HEAD;
 	HEAD = temp;
-
+	
 	initial_pos_x += 100;
 
 }
@@ -97,12 +101,17 @@ void Draw()
 
 		DrawRectangle(temp->to_be_passed_X, temp->to_be_passed_Y, temp->width, temp->height, temp->self_color);
 		DrawText(TextFormat("%i", temp->data), temp->to_be_passed_X + 20, temp->to_be_passed_Y + 20, 20, BLACK);
+		// draw line between the nodes
+		DrawLine(temp->to_be_passed_X + 50 , temp->to_be_passed_Y + 50  , temp->to_be_passed_X + 100, temp->to_be_passed_Y , BLACK);
+		DrawCircle(temp->to_be_passed_X + 50, temp->to_be_passed_Y + 50, 5, BLACK);
+		
+		// at the end of each line , print "NULL"
+		//DrawText("NULL", temp->to_be_passed_X + 100, temp->to_be_passed_Y, 20, BLACK);
 
-		// if end of the list is reached , break the loop
-		if (temp != NULL)
-		{
-			stopper = false;
-		}
+		
+			
+
+		
 
 		temp = temp->next;
 
@@ -110,6 +119,9 @@ void Draw()
 
 	}
 }
+
+// use initial_pos_x and initial_pos_y to draw lines between the nodes
+
 
 void Delete_Node()
 {
@@ -154,7 +166,8 @@ int main()
 
 		//DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
-
+		//green cicrle , following the mouse , turns red when clicked
+		DrawCircle(GetMouseX(), GetMouseY(), 20, GREEN);
 
 
 		// insert 5 nodes in the linked 
@@ -179,6 +192,7 @@ int main()
 		if (stopper == false)
 		{
 			Draw();
+		//	Draw_Line();
 		}
 		else {
 			DrawText("The stopper is true", 100, 100, 20, BLACK);
@@ -199,7 +213,12 @@ int main()
 		// DrawText(TextFormat("%i", node4->data), node4->self_position_X + node4->width / 2 - 5, node4->self_position_Y + node4->height / 2 - 10, 20, BLACK);
 		// DrawText(TextFormat("%i", node4->data), node5->self_position_X + node5->width / 2 - 5, node5->self_position_Y + node5->height / 2 - 10, 20, BLACK);
 
-		//Create a button with the text "Add Node" at the bottom left corner of the screen
+		
+		// Create a  rectangle , with text "HEAD" below button1 by 20 pixels
+		//void DrawRectangle(int posX, int posY, int width, int height, Color color);
+		DrawRectangle(10, 60, 50, 50, BLACK);
+		DrawText("HEAD", 10, 70, 20, WHITE);
+		DrawLine(60, 70, initial_pos_x , initial_pos_y, BLACK);
 
 
 		// 5 rectangles , with 5 values if the button is clicked , set value of value_for_new_node to the value of the button
@@ -309,6 +328,15 @@ int main()
 					no_value_selected = true;
 				}
 			}
+		}
+
+
+		// if there is no node in the linked list , draw "Head is NULL" at right side of the screen
+		if (HEAD == NULL)
+		{
+			//void DrawText(const char *text, int posX, int posY, int fontSize, Color color);
+			DrawText("Head is NULL", 500,300 , 20, BLACK);
+			DrawText("Linked List is Empty", 500, 350, 20, BLACK);
 		}
 
 		EndDrawing();
