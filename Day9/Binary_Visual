@@ -1,16 +1,27 @@
-#include <iostream>
+#include<iostream>
 #include "raylib.h"
 
 using namespace std;
 
-int BT_int_value = 0;
 
-class _Binary_Tree_Node
-{
+int ScreenWidth = 800;
+int ScreenHeight = 450;
+
+int node_value = 0;
+
+// Functions headers for the UI elements 
+void mouse_hove_on_buttons_state_color();
+void mouse_click_state_value_setter();
+void Drawing_the_buttons_at_top();
+
+
+
+
+class Node {
 public:
     int data;
-    _Binary_Tree_Node* left;
-    _Binary_Tree_Node* right;
+    Node* left;
+    Node* right;
 
     int x;
     int y;
@@ -18,7 +29,13 @@ public:
     Color color = RED;
 };
 
-void _Binary_Tree_visual(_Binary_Tree_Node* root, int x, int y, int level)
+Node* root = NULL;  // root node headers
+
+
+// Binary Tree opreations 
+
+
+void _Binary_Tree_visual(Node* root, int x, int y, int level)
 {
     if (root == NULL)
         return;
@@ -30,12 +47,17 @@ void _Binary_Tree_visual(_Binary_Tree_Node* root, int x, int y, int level)
     _Binary_Tree_visual(root->right, x + 100 / level, y + 100, level + 1);
 }
 
-void _Binary_Tree_visual_draw(_Binary_Tree_Node* root)
+
+
+
+void _Binary_Tree_visual_draw(Node* root)
 {
     if (root == NULL)
         return;
 
-    DrawCircle(root->x, root->y, 20, root->color);
+    //void DrawCircle(int centerX, int centerY, float radius, Color color);
+    DrawCircle(root->x, root->y + 20, 20, root->color);
+    DrawText(TextFormat("%d", root->data), root->x - 5, root->y + 10, 20, WHITE);
 
     if (root->left != NULL)
     {
@@ -51,130 +73,158 @@ void _Binary_Tree_visual_draw(_Binary_Tree_Node* root)
 }
 
 
-void insert(_Binary_Tree_Node* root, int data)
+
+void insert(Node*& root, int value)
 {
     if (root == NULL)
     {
-        root = new _Binary_Tree_Node();
-        root->data = data;
-        return;
+        root = new Node();
+        root->data = value;
     }
-
-    if (data < root->data)
+    else if (value < root->data)
     {
-        if (root->left == NULL)
-        {
-            root->left = new _Binary_Tree_Node();
-            root->left->data = data;
-            return;
-        }
-        else
-        {
-            insert(root->left, data);
-        }
+        insert(root->left, value);
     }
     else
     {
-        if (root->right == NULL)
-        {
-            root->right = new _Binary_Tree_Node();
-            root->right->data = data;
-            return;
-        }
-        else
-        {
-            insert(root->right, data);
-        }
+        insert(root->right, value);
     }
 }
 
 
-int ScreenWidth = 800;
-int ScreenHeight = 600;
+// Extra Functions below
+// Extra Functions below
+// Extra Functions below
 
-_Binary_Tree_Node* root = new _Binary_Tree_Node();
+// if the tree is empty , DrawText() "Empty Tree" , else do nothing 
+void is_empty_tree(Node* root)
+{
+    if (root == NULL)
+    {
+        DrawText("Empty Tree", 10, 100, 20, BLACK);
+    }
+    else {
+        DrawText("Tree is not Empty", 10, 100, 20, BLACK);
+    }
+}
+
+void whats_the_value_to_insert()
+{
+    DrawText(TextFormat("node_value = %i", node_value), 10, 200, 30, BLACK);
+
+}
+
+//function to point at the root node circle with text "root"
+void here_is_my_root(Node* root)
+{
+	
+	// if Tree is not empty the draw the text "root" at the root node circle
+	if (root != NULL)
+	{
+		DrawText("root", 500, 70, 20, BLACK);
+		// draw an arrow pointing at the root node circle on the left
+		DrawLine(500, 90, 400, 90 , BLACK);
+        
+	}
+}
+
+// Extra Functions above 
+// Extra Functions above 
+// Extra Functions above 
+
+
+// delete the leaf node alone 
+
+void DeleteNode(Node*& root, int value) {
+    if (root == NULL) return;
+    if (root->left == NULL && root->right == NULL && root->data == value) {
+        delete root;
+        root = NULL;
+        return;
+    }
+    DeleteNode(root->left, value);
+    DeleteNode(root->right, value);
+}
+
+
 
 
 int main()
 {
-    InitWindow(ScreenWidth, ScreenHeight, "Binary Tree Visual");
+    InitWindow(ScreenWidth, ScreenHeight, "Binary Tree");
+    SetTargetFPS(60);
 
+    Node* root = NULL;
 
+    // insert 5 values in the tree without using the insert() function
 
-
-
-
-
-
-    _Binary_Tree_visual(root, 400, 50, 1);
 
     while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
+        // Extra Functions caller
+        is_empty_tree(root);
+        // 5 Buttons , with 5 DrawText Values , if hover over button , change color to green , if click node_value = button value
+        //void DrawRectangle(int x, int y, int width, int height, Color color);
 
-        //Use DrawRectangle to Draw 5 buttons at the top of the screen with use DrawText() text "1", "2", "3", "4", "5"
-        // width of the button is 50 and height is 50
-        DrawRectangle(1, 0, 50, 50, BLACK);
-        DrawText("1", 20, 20, 20, WHITE);
-        // draw second button after 50 pixels
-        DrawRectangle(51, 0, 50, 50, BLACK);
-        DrawText("2", 70, 20, 20, WHITE);
-        // draw third button after 100 pixels
-        DrawRectangle(101, 0, 50, 50, BLACK);
-        DrawText("3", 120, 20, 20, WHITE);
-        // draw fourth button after 150 pixels
-        DrawRectangle(151, 0, 50, 50, BLACK);
-        DrawText("4", 170, 20, 20, WHITE);
-        // draw fifth button after 200 pixels
-        DrawRectangle(201, 0, 50, 50, BLACK);
-        DrawText("5", 220, 20, 20, WHITE);
+        Drawing_the_buttons_at_top();
+        //if mouse is over button any button , change color to green
 
-        //if the button is clicked set the value of BT_int_value to the number of the button
+        mouse_hove_on_buttons_state_color();
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        //if mouse is clicked , node_value = button value
+
+        mouse_click_state_value_setter();
+
+
+        // display the value of node_value
+        whats_the_value_to_insert();
+
+
+        // here is my root node
+        here_is_my_root(root);
+
+        
+        // Draw a button , black and the bottom left corner , if clicked , insert the node_value into the tree
+        DrawRectangle(0, 400, 100, 50, BLACK);
+        DrawText("Insert", 20, 420, 20, WHITE);
+
+        //  if hover over the button , change color to green and if clicked , insert the node_value into the tree
+        if (CheckCollisionPointRec(GetMousePosition(), { 0, 400, 100, 50 }))
         {
-            if (GetMouseX() > 1 && GetMouseX() < 50 && GetMouseY() > 0 && GetMouseY() < 50)
+            DrawRectangle(0, 400, 100, 50, GREEN);
+            DrawText("Insert", 20, 420, 20, WHITE);
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                BT_int_value = 1;
-            }
-            if (GetMouseX() > 51 && GetMouseX() < 100 && GetMouseY() > 0 && GetMouseY() < 50)
-            {
-                BT_int_value = 2;
-            }
-            if (GetMouseX() > 101 && GetMouseX() < 150 && GetMouseY() > 0 && GetMouseY() < 50)
-            {
-                BT_int_value = 3;
-            }
-            if (GetMouseX() > 151 && GetMouseX() < 200 && GetMouseY() > 0 && GetMouseY() < 50)
-            {
-                BT_int_value = 4;
-            }
-            if (GetMouseX() > 201 && GetMouseX() < 250 && GetMouseY() > 0 && GetMouseY() < 50)
-            {
-                BT_int_value = 5;
+                insert(root, node_value);
             }
         }
 
+        //Draw a button , black and the bottom right corner , if clicked , delete the node_value from tree
+        DrawRectangle(700, 400, 100, 70, BLACK);
+        DrawText("DELETE", 700, 420, 20, WHITE);
 
-
-
-
-        //add a button at the bottom of the screen to add with text "Add"
-        DrawRectangle(1, 550, 800, 50, BLACK);
-        DrawText("Add", 400, 550, 20, WHITE);
-        //if the button is clicked add the value of BT_int_value to the tree
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        // if hover over the button , change color to green and if clicked , delete the node_value from tree
+        if (CheckCollisionPointRec(GetMousePosition(), { 700, 400, 100, 70 }))
         {
-            if (GetMouseX() > 1 && GetMouseX() < 800 && GetMouseY() > 550 && GetMouseY() < 600)
+            DrawRectangle(700, 400, 100, 70, GREEN);
+            DrawText("DELETE", 700, 420, 20, WHITE);
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                insert(root, BT_int_value);
+                DeleteNode(root, node_value);
             }
         }
 
-
+        _Binary_Tree_visual(root, ScreenWidth / 2, 50, 1);
         _Binary_Tree_visual_draw(root);
+
+
+
+
+
+
 
         EndDrawing();
     }
@@ -183,3 +233,82 @@ int main()
     return 0;
 }
 
+
+
+
+/// all the ui related elements are at the bottom 
+
+
+void Drawing_the_buttons_at_top()
+{
+    DrawRectangle(0, 0, 100, 50, BLACK);
+    DrawText("1", 20, 20, 20, WHITE);
+    DrawRectangle(100, 0, 100, 50, BLACK);
+    DrawText("2", 100, 20, 20, WHITE);
+    DrawRectangle(200, 0, 100, 50, BLACK);
+    DrawText("3", 200, 20, 20, WHITE);
+    DrawRectangle(300, 0, 100, 50, BLACK);
+    DrawText("4", 300, 20, 20, WHITE);
+    DrawRectangle(400, 0, 100, 50, BLACK);
+    DrawText("5", 400, 20, 20, WHITE);
+}
+
+
+
+
+void mouse_hove_on_buttons_state_color()
+{
+    if (CheckCollisionPointRec(GetMousePosition(), { 0, 0, 100, 50 }))
+    {
+        DrawRectangle(0, 0, 100, 50, RED);
+        DrawText("1", 20, 20, 20, WHITE);
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), { 100, 0, 100, 50 }))
+    {
+        DrawRectangle(100, 0, 100, 50, RED);
+        DrawText("2", 100, 20, 20, WHITE);
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), { 200, 0, 100, 50 }))
+    {
+        DrawRectangle(200, 0, 100, 50, RED);
+        DrawText("3", 200, 20, 20, WHITE);
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), { 300, 0, 100, 50 }))
+    {
+        DrawRectangle(300, 0, 100, 50, RED);
+        DrawText("4", 300, 20, 20, WHITE);
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), { 400, 0, 100, 50 }))
+    {
+        DrawRectangle(400, 0, 100, 50, RED);
+        DrawText("5", 400, 20, 20, WHITE);
+    }
+}
+
+
+void mouse_click_state_value_setter()
+{
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    {
+        if (CheckCollisionPointRec(GetMousePosition(), { 0, 0, 100, 50 }))
+        {
+            node_value = 1;
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), { 100, 0, 100, 50 }))
+        {
+            node_value = 2;
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), { 200, 0, 100, 50 }))
+        {
+            node_value = 3;
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), { 300, 0, 100, 50 }))
+        {
+            node_value = 4;
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), { 400, 0, 100, 50 }))
+        {
+            node_value = 5;
+        }
+    }
+}
