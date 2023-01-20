@@ -1,7 +1,7 @@
 #include <iostream>
 #include "raylib.h"
 
-using namespace std; 
+using namespace std;
 
 int BT_int_value = 0;
 
@@ -9,8 +9,8 @@ class _Binary_Tree_Node
 {
 public:
     int data;
-    _Binary_Tree_Node *left;
-    _Binary_Tree_Node *right;
+    _Binary_Tree_Node* left;
+    _Binary_Tree_Node* right;
 
     int x;
     int y;
@@ -18,7 +18,7 @@ public:
     Color color = RED;
 };
 
-void _Binary_Tree_visual(_Binary_Tree_Node *root, int x, int y, int level)
+void _Binary_Tree_visual(_Binary_Tree_Node* root, int x, int y, int level)
 {
     if (root == NULL)
         return;
@@ -30,7 +30,7 @@ void _Binary_Tree_visual(_Binary_Tree_Node *root, int x, int y, int level)
     _Binary_Tree_visual(root->right, x + 100 / level, y + 100, level + 1);
 }
 
-void _Binary_Tree_visual_draw(_Binary_Tree_Node *root)
+void _Binary_Tree_visual_draw(_Binary_Tree_Node* root)
 {
     if (root == NULL)
         return;
@@ -51,7 +51,7 @@ void _Binary_Tree_visual_draw(_Binary_Tree_Node *root)
 }
 
 
-void insert(_Binary_Tree_Node *root, int data)
+void insert(_Binary_Tree_Node* root, int data)
 {
     if (root == NULL)
     {
@@ -92,16 +92,16 @@ void insert(_Binary_Tree_Node *root, int data)
 int ScreenWidth = 800;
 int ScreenHeight = 600;
 
- _Binary_Tree_Node *root = new _Binary_Tree_Node();
+_Binary_Tree_Node* root = new _Binary_Tree_Node();
 
 
 int main()
 {
-    InitWindow(ScreenWidth , ScreenHeight , "Binary Tree Visual");
+    InitWindow(ScreenWidth, ScreenHeight, "Binary Tree Visual");
 
-   
 
-    
+
+
 
 
 
@@ -113,7 +113,7 @@ int main()
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-   		
+
         //Use DrawRectangle to Draw 5 buttons at the top of the screen with use DrawText() text "1", "2", "3", "4", "5"
         // width of the button is 50 and height is 50
         DrawRectangle(1, 0, 50, 50, BLACK);
@@ -156,7 +156,7 @@ int main()
                 BT_int_value = 5;
             }
         }
-        
+
 
 
 
@@ -172,7 +172,7 @@ int main()
                 insert(root, BT_int_value);
             }
         }
-        
+
 
         _Binary_Tree_visual_draw(root);
 
@@ -182,3 +182,4 @@ int main()
     CloseWindow();
     return 0;
 }
+
